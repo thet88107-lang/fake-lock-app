@@ -5,10 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.core.app.NotificationCompat
 
@@ -57,6 +61,14 @@ class LockOverlayService : Service() {
 
     private val pressLog = mutableListOf<Char>()
     private var lastPressTime = 0L
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val reapplyImmersive = object : Runnable {
+        override fun run() {
+            overlayView?.let { hideSystemBars(it) }
+            handler.postDelayed(this, 1500)
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -116,10 +128,15 @@ class LockOverlayService : Service() {
             WindowManager.LayoutParams.MATCH_PARENT,
             type,
             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
             PixelFormat.OPAQUE
         )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            params.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
 
         view.setOnKeyListener { _, keyCode, event ->
             handleKeyEvent(keyCode, event)
@@ -128,8 +145,41 @@ class LockOverlayService : Service() {
 
         windowManager?.addView(view, params)
         overlayView = view
-        view.post { view.requestFocus() }
+        hideSystemBars(view)
+        view.post {
+            view.requestFocus()
+            hideSystemBars(view)
+        }
         pressLog.clear()
+        handler.removeCallbacks(reapplyImmersive)
+        handler.postDelayed(reapplyImmersive, 1500)
+    }
+
+    /**
+     * Hides the status bar and navigation bar and extends our black window
+     * underneath them, so no system UI (clock, signal icons, gesture pill)
+     * is visible anywhere on screen. On pre-R devices this is "immersive
+     * sticky" — a swipe can reveal the bars briefly, which is why we keep
+     * re-hiding on a short loop (see reapplyImmersive) rather than only once.
+     */
+    private fun hideSystemBars(view: View) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            view.windowInsetsController?.let { controller ->
+                controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+                controller.systemBarsBehavior =
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            view.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                )
+        }
     }
 
     /**
@@ -178,6 +228,7 @@ class LockOverlayService : Service() {
     }
 
     fun removeOverlay() {
+        handler.removeCallbacks(reapplyImmersive)
         overlayView?.let {
             try {
                 windowManager?.removeView(it)
