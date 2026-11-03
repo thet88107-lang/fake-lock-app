@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_gradient"
+    android:gravity="center"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/clockText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12:00"
+        android:textColor="@color/white"
+        android:textSize="64sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monday, 1 January"
+        android:textColor="@color/white_70"
+        android:textSize="16sp"
+        android:layout_marginBottom="48dp" />
+
+    <TextView
+        android:id="@+id/swipeHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="اضغط في أي حتة في الشاشة"
+        android:textColor="@color/white_70"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/pinSection"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="16dp">
+
+        <EditText
+            android:id="@+id/unlockPinInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_70"
+            android:hint="ادخل الـPIN"
+            android:gravity="center" />
+
+        <Button
+            android:id="@+id/unlockButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="فتح"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+</LinearLayout>

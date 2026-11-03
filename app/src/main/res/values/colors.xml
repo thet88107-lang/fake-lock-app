@@ -1,0 +1,7 @@
+<resources>
+    <color name="lock_bg_top">#0F2027</color>
+    <color name="lock_bg_bottom">#203A43</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="accent">#4FD1C5</color>
+</resources>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔒 Fake Lock"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="قفل وهمي للموبايل كبرانك"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <EditText
+        android:id="@+id/pinInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="PIN اختياري لفك القفل (سيبه فاضي لو مش عايز)"
+        android:inputType="numberPassword"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnGrantOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1) اديني صلاحية الظهور فوق التطبيقات"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2) شغّل القفل الوهمي"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="إيقاف" />
+
+</LinearLayout>

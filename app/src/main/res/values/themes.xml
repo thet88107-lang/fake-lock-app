@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.FakeLock" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/lock_bg_bottom</item>
+        <item name="android:statusBarColor">@color/lock_bg_top</item>
+    </style>
+</resources>
