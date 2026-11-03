@@ -25,8 +25,6 @@ jobs:
 
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon
-        env:
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
